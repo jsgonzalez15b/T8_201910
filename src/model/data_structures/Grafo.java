@@ -51,7 +51,7 @@ public class Grafo <K extends Comparable<K>,V,A>
 	//esqueleto
 	
 	/**
-	 * Adiciona un vertice con un Id único. El vertice tiene la informacion InfoVertex
+	 * Adiciona un vertice con un Id unico. El vertice tiene la informacion InfoVertex
 	 */
 	public void addVertex( K idVertex, V infoVertex)
 	{
@@ -77,7 +77,7 @@ public class Grafo <K extends Comparable<K>,V,A>
 	}
 	
 	/**
-	 * Modificar la información del vértice idVertex
+	 * Modificar la informacion del vertice idVertex
 	 */
 	public void setInfoVertex(K idVertex, V infoVertex)
 	{
@@ -85,7 +85,7 @@ public class Grafo <K extends Comparable<K>,V,A>
 	}
 	
 	/**
-	 * Obtener la información de un arco
+	 * Obtener la informacion de un arco
 	 * @return 
 	 */
 	public A getInfoArc(K idVertexIni, K idVertexFin) 
@@ -94,7 +94,7 @@ public class Grafo <K extends Comparable<K>,V,A>
 	}
 	
 	/**
-	 * Modificar la información del arco entre los vértices idVertexIni eidVertexFin
+	 * Modificar la informacion del arco entre los vertices idVertexIni eidVertexFin
 	 */
 	public void setInfoArc(K idVertexIni, K idVertexFin,
 			A infoArc)
@@ -103,7 +103,7 @@ public class Grafo <K extends Comparable<K>,V,A>
 	}
 	
 	/**
-	 * Retorna los identificadores de los vértices adyacentes a idVertex
+	 * Retorna los identificadores de los vÃ©rtices adyacentes a idVertex
 	 */
 	public Iterator<K> adj(K idVertex) 
 	{
