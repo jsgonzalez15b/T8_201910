@@ -28,7 +28,7 @@ public class Vertice <K extends Comparable<K>,A>
 	 */
 	public Vertice(K pLlave)
 	{
-		//el metodo agregar arco tiene un factor de carga maximo del 75%
+		//el metodo agregar arco tiene un factor de carga maximo del 0.75
 		llaveId = pLlave;
 		infoVertex = new Arco[100000];
 		cargaInfoVertex = 0;
@@ -58,13 +58,16 @@ public class Vertice <K extends Comparable<K>,A>
 	 */
 	public void agregarArco(A pPeso,K pLlave)
 	{
-		double factorActual= cargaInfoVertex!=0?infoVertex.length/cargaInfoVertex:0;
+		double factorActual= cargaInfoVertex/infoVertex.length;
 		int hashCalculado = pLlave.hashCode()& 0x7fffffff %infoVertex.length; 
 		
 		if(factorActual<0.75)
 		{
-			//no es requerido un condicional ya que los id son unicos
-			infoVertex[hashCalculado]=new Arco(pPeso,pLlave); 	
+			if(infoVertex[hashCalculado]!=null)//no es requerido un else ya que los id son unicos
+			{
+				infoVertex[hashCalculado]=new Arco(pPeso,pLlave);
+				cargaInfoVertex++;
+			}
 		}
 		else
 		{

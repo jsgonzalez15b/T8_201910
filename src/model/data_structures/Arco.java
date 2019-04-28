@@ -22,7 +22,7 @@ public class Arco<K extends Comparable<K>,A>
 	 * @param pPeso peso del arco
 	 * @param pLlave llave id del vertice adyacente
 	 */
-	public Arco (A pPeso,K pLlave)
+	public Arco (A pPeso, K pLlave)
 	{
 		//se inicializan los atributos del arco
 		llaveId=pLlave;

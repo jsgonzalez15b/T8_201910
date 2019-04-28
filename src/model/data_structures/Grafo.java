@@ -18,16 +18,16 @@ public class Grafo <K extends Comparable<K>,V,A>
 	/**
 	 * Arreglo de arcos y nodos
 	 */
-	private V[] arreglo; //editar
+	private Vertice[] arreglo; 
 
-	//ver mas atributos?
+	
 
 	//Constructor
 	public Grafo()
 	{
 		nArcos=0;
 		nVertices=0;
-		arreglo= null; //provisionalmente
+		arreglo= new Vertice[100000]; //implementacion de factor de carga 0.75
 	}
 	
 	//Metodos
@@ -53,18 +53,71 @@ public class Grafo <K extends Comparable<K>,V,A>
 	/**
 	 * Adiciona un vertice con un Id unico. El vertice tiene la informacion InfoVertex
 	 */
-	public void addVertex( K idVertex, V infoVertex)
+	public void addVertex( K idVertex, V infoVertex) //PREGUNTAR SEGUNDO PARAMETRO
 	{
+		double factorActual= nVertices/arreglo.length;
+		int hashCalculado = idVertex.hashCode()& 0x7fffffff %arreglo.length; 
 		
+		if(factorActual<0.75)
+		{
+			if(arreglo[hashCalculado]!=null)//no es requerido un else ya que los id son unicos
+			{
+				arreglo[hashCalculado]=new Vertice(idVertex);
+				nVertices++;
+			}
+		}
+		else
+		{
+			reHashGrafo();
+			addVertex( idVertex, infoVertex);
+		}
 	}
 	
 	/**
+	 * Actualiza la posicion de todos los elementos del hashTable segun su llave y el nuevo tamano
+	 */
+	public void	reHashGrafo()
+	{
+		Vertice[] copiaHash= arreglo; //se crea un copia con los vertices actuales
+		arreglo = new Vertice[arreglo.length*2];//se aumenta la tabla del HashTableLinear
+
+		for ( int i = 0; i < copiaHash.length; i++)//se obtienen los nuevos indices 
+		{
+			if(copiaHash[i]!=null)
+			{
+				addVertex((K)copiaHash[i].darLlave(),(V)copiaHash[i].darArcos());
+			}
+		} 
+	}
+	/**
 	 * Adiciona el arco No dirigido entre el vertice IdVertexIni y el vertice IdVertexFin. El arco tiene la informacion infoArc.
 	 */
-	public void addEdge(K idVertexIni, K idVertexFin, A
-			infoArc )
+	public void addEdge(K idVertexIni, K idVertexFin, A infoArc )
 	{
+		int hashCalculado1 = idVertexIni.hashCode()& 0x7fffffff %arreglo.length; 
+		int hashCalculado2 = idVertexFin.hashCode()& 0x7fffffff %arreglo.length; 
 		
+		//necesariamente ambos vertices deben existir? PREGUNTAR
+		if(arreglo[hashCalculado1]!=null && arreglo[hashCalculado2]!=null)
+		{
+			arreglo[hashCalculado1].agregarArco(infoArc, idVertexFin); //se agrega el peso del arco y el vertice Fin como conexion al primero
+			arreglo[hashCalculado2].agregarArco(infoArc, idVertexIni); //se agrega el peso del arco y el vertice Ini como conexion al segundo
+		}
+//		if(arreglo[hashCalculado1]==null || arreglo[hashCalculado2]==null) ASK XD
+//		{
+//			//se crean los vertices que no han sido creados
+//			if(arreglo[hashCalculado1]==null)
+//			{
+//				arreglo[hashCalculado1]= new Vertice( idVertexIni);
+//			}
+//			if(arreglo[hashCalculado2]==null)
+//			{
+//				arreglo[hashCalculado2]= new Vertice( idVertexFin);
+//			}
+//			
+//			arreglo[hashCalculado1].agregarArco(infoArc, idVertexFin); //se agrega el peso del arco y el vertice Fin como conexion al primero
+//			arreglo[hashCalculado2].agregarArco(infoArc, idVertexIni); //se agrega el peso del arco y el vertice Ini como conexion al segundo
+//		}
 	}
 	
 	/**
