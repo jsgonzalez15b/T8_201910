@@ -48,28 +48,27 @@ public class Grafo <K extends Comparable<K>,V,A>
 	{
 		return nArcos;
 	}
-	//esqueleto
 	
 	/**
 	 * Adiciona un vertice con un Id unico. El vertice tiene la informacion InfoVertex
 	 */
-	public void addVertex( K idVertex, V infoVertex) //PREGUNTAR SEGUNDO PARAMETRO
+	public void addVertex( K pIdVertex, V infoVertex) //PREGUNTAR SEGUNDO PARAMETRO
 	{
 		double factorActual= nVertices/arreglo.length;
-		int hashCalculado = idVertex.hashCode()& 0x7fffffff %arreglo.length; 
+		int hashCalculado = pIdVertex.hashCode()& 0x7fffffff %arreglo.length; 
 		
 		if(factorActual<0.75)
 		{
 			if(arreglo[hashCalculado]!=null)//no es requerido un else ya que los id son unicos
 			{
-				arreglo[hashCalculado]=new Vertice(idVertex);
+				arreglo[hashCalculado]=new Vertice(pIdVertex,(Comparable) infoVertex);
 				nVertices++;
 			}
 		}
 		else
 		{
 			reHashGrafo();
-			addVertex( idVertex, infoVertex);
+			addVertex( pIdVertex, infoVertex);
 		}
 	}
 	
@@ -103,6 +102,7 @@ public class Grafo <K extends Comparable<K>,V,A>
 			arreglo[hashCalculado1].agregarArco(infoArc, idVertexFin); //se agrega el peso del arco y el vertice Fin como conexion al primero
 			arreglo[hashCalculado2].agregarArco(infoArc, idVertexIni); //se agrega el peso del arco y el vertice Ini como conexion al segundo
 		}
+		//Caso en el que se crea el vertice pero este caso no aplica creo - igual lo dejo por si acaso
 //		if(arreglo[hashCalculado1]==null || arreglo[hashCalculado2]==null) ASK XD
 //		{
 //			//se crean los vertices que no han sido creados
@@ -122,28 +122,40 @@ public class Grafo <K extends Comparable<K>,V,A>
 	
 	/**
 	 * Obtener la informacion de un vertice
-	 * @return 
+	 * @param pIdVertex id del vertice
+	 * @return elValor informacion del vertice
 	 */
-	public V getInfoVertex(K idVertex)
+	public V getInfoVertex(K pIdVertex)
 	{
-		return null;
+		int hashCalculado = pIdVertex.hashCode()& 0x7fffffff %arreglo.length; 
+		V elValor =(V) arreglo[hashCalculado].darValor();
+		return elValor;
 	}
 	
 	/**
 	 * Modificar la informacion del vertice idVertex
+	 * @param pIdVertex informaci�n
+	 * @param pInfoVertex nueva informacion del vertice
 	 */
-	public void setInfoVertex(K idVertex, V infoVertex)
+	public void setInfoVertex(K pIdVertex, V pInfoVertex)
 	{
-		
+		int hashCalculado = pIdVertex.hashCode()& 0x7fffffff %arreglo.length; 
+		arreglo[hashCalculado].setInfoVertex((Comparable) pInfoVertex);;
 	}
 	
 	/**
 	 * Obtener la informacion de un arco
-	 * @return 
+	 * @return infoArco null si alguno de los indices no es encontrado
 	 */
 	public A getInfoArc(K idVertexIni, K idVertexFin) 
 	{
-		return null;
+		int hashCalculado1 = idVertexIni.hashCode()& 0x7fffffff %arreglo.length; 
+		A infoArco = null; //informacion del arco a retornas
+		if(arreglo[hashCalculado1]!=null)
+		{
+			infoArco = (A) arreglo[hashCalculado1].darArco(idVertexFin);
+		}
+		return infoArco;
 	}
 	
 	/**
@@ -152,11 +164,20 @@ public class Grafo <K extends Comparable<K>,V,A>
 	public void setInfoArc(K idVertexIni, K idVertexFin,
 			A infoArc)
 	{
+		//se obtienen los indices de los hash
+		int hashCalculado1 = idVertexIni.hashCode()& 0x7fffffff %arreglo.length; 
+		int hashCalculado2 = idVertexFin.hashCode()& 0x7fffffff %arreglo.length; 
+		//si ambos existen su arco es actualizado
+		if(arreglo[hashCalculado1]!=null && arreglo[hashCalculado2]!=null)
+		{
+			arreglo[hashCalculado1].setInfoArc(idVertexFin, infoArc);
+			arreglo[hashCalculado2].setInfoArc(idVertexIni, infoArc);
+		}
 		
 	}
 	
 	/**
-	 * Retorna los identificadores de los vÃ©rtices adyacentes a idVertex
+	 * Retorna los identificadores de los vertices adyacentes a idVertex
 	 */
 	public Iterator<K> adj(K idVertex) 
 	{

@@ -44,4 +44,12 @@ public class Arco<K extends Comparable<K>,A>
 	{
 		return pesoArco;
 	}
+	
+	/**
+	 * Modificar la informacion del arco con el vertice idVertexFin
+	 */
+	public void setInfoArc(A infoArc)
+	{
+		pesoArco=infoArc;
+	}
 }

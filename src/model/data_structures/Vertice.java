@@ -3,7 +3,7 @@ package model.data_structures;
 /*
  * Clase de vertice generico, funciona como una tupla con llave id, y valor infoVertex
  */
-public class Vertice <K extends Comparable<K>,A>
+public class Vertice <V extends Comparable<V>,K extends Comparable<K>,A>
 {
 
 	//Atributos
@@ -22,15 +22,20 @@ public class Vertice <K extends Comparable<K>,A>
 	 */
 	private int cargaInfoVertex;
 
+	/**
+	 * InfoVertex c(orrespondiente a la latitud y longitud para el taller 8) 
+	 */
+	private V vVertex;
 	//Constructor
 	/**
 	 * @param pLlave llave id del nuevo vertice
 	 */
-	public Vertice(K pLlave)
+	public Vertice(K pLlave,V pValueVertex)
 	{
 		//el metodo agregar arco tiene un factor de carga maximo del 0.75
 		llaveId = pLlave;
 		infoVertex = new Arco[100000];
+		vVertex=pValueVertex;
 		cargaInfoVertex = 0;
 	}
 	//Metodos
@@ -41,6 +46,23 @@ public class Vertice <K extends Comparable<K>,A>
 	public K darLlave()
 	{
 		return llaveId;
+	}
+	
+	/**
+	 * retorna el valor asociado al vertice
+	 */
+	public V darValor()
+	{
+		return vVertex;
+	}
+	
+	/**
+	 * Modifica la informacion del vertice 
+	 * @param infoVertex nueva informacion del vertice
+	 */
+	public void setInfoVertex(V pInfoVertex)
+	{
+		vVertex=pInfoVertex;
 	}
 	
 	/**
@@ -104,5 +126,16 @@ public class Vertice <K extends Comparable<K>,A>
 		A pArco = (A) infoVertex[hashCalculado];
 		
 		return pArco;
+	}
+	
+	/**
+	 * Modificar la informacion del arco con el vertice idVertexFin
+	 */
+	public void setInfoArc(K idVertexFin,
+			A infoArc)
+	{
+		int hashCalculado = idVertexFin.hashCode()& 0x7fffffff %infoVertex.length;
+		infoVertex[hashCalculado].setInfoArc(infoArc);;
+		
 	}
 }
